@@ -15,6 +15,7 @@ start_time = time.time()
 
 for order_id in range(1, TOTAL_ORDERS + 1):
     side = random.choice(["BUY", "SELL"])
+    
     price = random.randint(95, 105)
     quantity = random.randint(10, 50)
 
