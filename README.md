@@ -1,6 +1,6 @@
 CHRONOSMATCH -ZERO-COPY-HIGH-FREQUENCY-TRADING-ENGINE
     The Main Objective of Our Project is-
-    Add buy and sell orders
-    store the orders
-    Match buy and sell orders 
-    Generate the trade result
+   1.  Add buy and sell orders
+   2. store the orders
+   3. Match buy and sell orders 
+   4. Generate the trade result
