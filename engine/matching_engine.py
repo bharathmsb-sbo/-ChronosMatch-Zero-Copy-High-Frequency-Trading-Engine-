@@ -33,6 +33,15 @@ class MatchingEngine:
     def match_orders(self):
         trades = []
 
+        self.buy_orders.sort(
+            key=lambda x: x["price"],
+            reverse=True
+        )
+
+        self.sell_orders.sort(
+            key=lambda x: x["price"]
+        )
+
         for buy in self.buy_orders:
             for sell in self.sell_orders:
 
