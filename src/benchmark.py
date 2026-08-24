@@ -9,7 +9,6 @@ total_trades = 0
 
 # Number of simulated orders to process
 TOTAL_ORDERS = 100
-
 # Start stopwatch
 start_time = time.time()
 
@@ -25,7 +24,7 @@ for order_id in range(1, TOTAL_ORDERS + 1):
         "price": price,
         "quantity": quantity
     }
-
+ 
     if side == "BUY":
         buy_orders.append(order)
     else:
