@@ -1,0 +1,32 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Cython build artifacts
+build/
+*.c
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+
+# Memory-mapped files (runtime only)
+*.bin
+chronos_mmap.bin
+
+# Database files (runtime only)
+*.db
+*.db-journal
+chronos_trades.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
