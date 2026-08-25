@@ -1,17 +1,15 @@
-from setuptools import setup, Extension
+from setuptools import Extension, setup
 from Cython.Build import cythonize
-import numpy as np
 
 extensions = [
     Extension(
-        "order_book",
-        ["order_book.pyx"],
-        include_dirs=[np.get_include()],
-        extra_compile_args=["-O3", "-ffast-math"],
+        "chronosmatch.orderbook",
+        ["cython_engine/orderbook.pyx"],
+        extra_compile_args=["-O3", "-march=native"],
     )
 ]
 
 setup(
-    name="chronosmatch",
-    ext_modules=cythonize(extensions, language_level="3"),
+    packages=["chronosmatch"],
+    ext_modules=cythonize(extensions, compiler_directives={"language_level": 3, "boundscheck": False, "wraparound": False, "cdivision": True}),
 )
