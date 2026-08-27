@@ -2,6 +2,7 @@
 import mmap
 import os
 
+
 BUFFER_FILE = "orders_mmap.dat"
 BUFFER_SIZE = 1024  # 1 KB pre-allocated memory
 
