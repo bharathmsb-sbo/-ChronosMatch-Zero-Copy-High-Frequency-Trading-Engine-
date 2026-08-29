@@ -165,6 +165,24 @@ Tests include:
 
 The test suite was executed successfully during development.
 
+## Memory Mapping
+
+ChronosMatch uses Python's `mmap` module to implement a memory-mapped ring buffer for efficient order data handling.
+
+The ring buffer stores order data in a fixed-size binary format using Python's `struct` module.
+
+The memory-mapped buffer is integrated into the order flow:
+
+```text
+BUY/SELL Order
+      ↓
+Memory-Mapped Ring Buffer
+      ↓
+OrderBook
+      ↓
+MatchingEngine
+      ↓
+Executed Trade
 ## Performance Benchmark
 
 Performance testing was added using Python's `time.perf_counter()`.
