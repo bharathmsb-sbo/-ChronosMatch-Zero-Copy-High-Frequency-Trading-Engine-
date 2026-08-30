@@ -5,6 +5,7 @@ class MatchingEngine:
     def __init__(self):
         self.buy_orders = []
         self.sell_orders = []
+        self.sequence = 0
         self.logger = get_logger("MatchingEngine")
 
     def add_order(self, order):
@@ -19,6 +20,9 @@ class MatchingEngine:
 
         if order["quantity"] <= 0:
             raise ValueError("Quantity must be greater than 0")
+
+        self.sequence += 1
+        order["sequence"] = self.sequence
 
         if order["side"] == "BUY":
             self.buy_orders.append(order)
@@ -62,13 +66,13 @@ class MatchingEngine:
     def match_orders(self):
         trades = []
 
+        # Price-Time Priority
         self.buy_orders.sort(
-            key=lambda x: x["price"],
-            reverse=True
+            key=lambda x: (-x["price"], x["sequence"])
         )
 
         self.sell_orders.sort(
-            key=lambda x: x["price"]
+            key=lambda x: (x["price"], x["sequence"])
         )
 
         for buy in self.buy_orders:
