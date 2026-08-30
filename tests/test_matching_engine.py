@@ -152,7 +152,6 @@ def test_cancel_order():
 def test_price_time_priority():
     engine = MatchingEngine()
 
-    # First BUY order
     order1 = {
         "order_id": 7,
         "side": "BUY",
@@ -160,7 +159,6 @@ def test_price_time_priority():
         "quantity": 5
     }
 
-    # Second BUY order with same price
     order2 = {
         "order_id": 8,
         "side": "BUY",
@@ -168,7 +166,6 @@ def test_price_time_priority():
         "quantity": 5
     }
 
-    # SELL order
     sell_order = {
         "order_id": 9,
         "side": "SELL",
@@ -182,7 +179,29 @@ def test_price_time_priority():
 
     trades = engine.match_orders()
 
-    # Earlier BUY order should match first
     assert trades[0]["buy_order"] == 7
     assert trades[0]["sell_order"] == 9
     assert trades[0]["quantity"] == 5
+
+
+def test_modify_order():
+    engine = MatchingEngine()
+
+    order = {
+        "order_id": 10,
+        "side": "BUY",
+        "price": 100,
+        "quantity": 10
+    }
+
+    engine.add_order(order)
+
+    result = engine.modify_order(
+        10,
+        price=105,
+        quantity=20
+    )
+
+    assert result is True
+    assert engine.buy_orders[0]["price"] == 105
+    assert engine.buy_orders[0]["quantity"] == 20

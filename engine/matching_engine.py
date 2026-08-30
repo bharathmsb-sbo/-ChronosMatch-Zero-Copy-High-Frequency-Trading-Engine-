@@ -27,7 +27,7 @@ class MatchingEngine:
         if order["side"] == "BUY":
             self.buy_orders.append(order)
 
-        elif order["side"] == "SELL":
+        else:
             self.sell_orders.append(order)
 
         self.logger.info(
@@ -35,7 +35,6 @@ class MatchingEngine:
         )
 
     def cancel_order(self, order_id):
-        # Search in BUY orders
         for order in self.buy_orders:
             if order["order_id"] == order_id:
                 self.buy_orders.remove(order)
@@ -46,7 +45,6 @@ class MatchingEngine:
 
                 return True
 
-        # Search in SELL orders
         for order in self.sell_orders:
             if order["order_id"] == order_id:
                 self.sell_orders.remove(order)
@@ -62,6 +60,52 @@ class MatchingEngine:
         )
 
         return False
+
+    def modify_order(self, order_id, price=None, quantity=None):
+        order = None
+
+        for existing_order in self.buy_orders:
+            if existing_order["order_id"] == order_id:
+                order = existing_order
+                break
+
+        if order is None:
+            for existing_order in self.sell_orders:
+                if existing_order["order_id"] == order_id:
+                    order = existing_order
+                    break
+
+        if order is None:
+            self.logger.warning(
+                f"Order not found for modification: {order_id}"
+            )
+            return False
+
+        if price is not None and price <= 0:
+            raise ValueError(
+                "Price must be greater than 0"
+            )
+
+        if quantity is not None and quantity <= 0:
+            raise ValueError(
+                "Quantity must be greater than 0"
+            )
+
+        if price is not None:
+            order["price"] = price
+
+        if quantity is not None:
+            order["quantity"] = quantity
+
+        # Modified order gets new time priority
+        self.sequence += 1
+        order["sequence"] = self.sequence
+
+        self.logger.info(
+            f"Order modified: {order}"
+        )
+
+        return True
 
     def match_orders(self):
         trades = []
@@ -105,12 +149,14 @@ class MatchingEngine:
                     )
 
         self.buy_orders = [
-            order for order in self.buy_orders
+            order
+            for order in self.buy_orders
             if order["quantity"] > 0
         ]
 
         self.sell_orders = [
-            order for order in self.sell_orders
+            order
+            for order in self.sell_orders
             if order["quantity"] > 0
         ]
 
