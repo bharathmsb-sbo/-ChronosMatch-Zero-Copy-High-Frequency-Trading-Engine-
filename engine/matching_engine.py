@@ -30,6 +30,35 @@ class MatchingEngine:
             f"Order added: {order}"
         )
 
+    def cancel_order(self, order_id):
+        # Search in BUY orders
+        for order in self.buy_orders:
+            if order["order_id"] == order_id:
+                self.buy_orders.remove(order)
+
+                self.logger.info(
+                    f"Order cancelled: {order}"
+                )
+
+                return True
+
+        # Search in SELL orders
+        for order in self.sell_orders:
+            if order["order_id"] == order_id:
+                self.sell_orders.remove(order)
+
+                self.logger.info(
+                    f"Order cancelled: {order}"
+                )
+
+                return True
+
+        self.logger.warning(
+            f"Order not found: {order_id}"
+        )
+
+        return False
+
     def match_orders(self):
         trades = []
 

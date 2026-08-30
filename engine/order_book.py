@@ -17,6 +17,21 @@ class OrderBook:
                 key=lambda x: x["price"]
             )
 
+    def cancel_order(self, order_id):
+        # Search in BUY orders
+        for order in self.buy_orders:
+            if order["order_id"] == order_id:
+                self.buy_orders.remove(order)
+                return True
+
+        # Search in SELL orders
+        for order in self.sell_orders:
+            if order["order_id"] == order_id:
+                self.sell_orders.remove(order)
+                return True
+
+        return False
+
     def show_orders(self):
         print("\n=== ORDER BOOK ===")
 
