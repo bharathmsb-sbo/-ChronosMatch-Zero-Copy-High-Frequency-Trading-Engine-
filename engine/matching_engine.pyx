@@ -1,4 +1,21 @@
 from utils.logger import get_logger
+from .c_order cimport COrder
+
+
+cdef inline int can_match(
+    int buy_price,
+    int sell_price
+):
+    return buy_price >= sell_price
+
+
+cdef inline int trade_size(
+    int buy_quantity,
+    int sell_quantity
+):
+    if buy_quantity < sell_quantity:
+        return buy_quantity
+    return sell_quantity
 
 
 cdef class MatchingEngine:
@@ -87,7 +104,6 @@ cdef class MatchingEngine:
         if quantity is not None:
             order["quantity"] = quantity
 
-        # Modified order gets new time priority
         self.sequence += 1
         order["sequence"] = self.sequence
 
@@ -117,9 +133,14 @@ cdef class MatchingEngine:
                 if buy["quantity"] == 0 or sell["quantity"] == 0:
                     continue
 
-                if buy["price"] >= sell["price"]:
+                # C-level price comparison
+                if can_match(
+                    buy["price"],
+                    sell["price"]
+                ):
 
-                    trade_quantity = min(
+                    # C-level quantity calculation
+                    trade_quantity = trade_size(
                         buy["quantity"],
                         sell["quantity"]
                     )
